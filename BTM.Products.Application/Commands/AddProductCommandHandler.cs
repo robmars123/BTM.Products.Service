@@ -1,5 +1,4 @@
 ﻿using BTM.Products.Application.Abstractions;
-using BTM.Products.Domain.Entities;
 
 namespace BTM.Products.Application.Commands
 {

@@ -22,10 +22,8 @@ namespace BTM.Products.Api.Controller
         {
             var results = _dispatcher.Send(new GetProductsQuery());
 
-            if (results == null)
-            {
+            if (results == null || !results.Result.Any())
                 return NotFound();
-            }
 
             return Ok(results.Result.ToList());
         }

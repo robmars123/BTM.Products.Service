@@ -2,6 +2,7 @@
 using BTM.Products.Application.Commands;
 using BTM.Products.Application.Queries.GetProducts;
 using BTM.Products.Contracts.ProductCommands;
+using BTM.Products.Contracts.ProductDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTM.Products.Api.Controller
@@ -18,17 +19,17 @@ namespace BTM.Products.Api.Controller
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var results = _dispatcher.Send(new GetProductsQuery());
+            var results = await _dispatcher.Send<GetProductsQuery, IEnumerable<ProductDto>>(new GetProductsQuery());
 
-            if (results == null || !results.Result.Any())
+            if (results == null || !results.Any())
                 return NotFound();
 
-            return Ok(results.Result.ToList());
+            return Ok(results.ToList());
         }
 
-        // POST
+        // POST  
         [HttpPost]
         public IActionResult Create([FromBody] CreateProductRequest product)
         {

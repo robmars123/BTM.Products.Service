@@ -2,8 +2,8 @@
 {
     public interface IDispatcher
     {
-        Task Send(ICommand command);
-        Task<TResponse> Send<TResponse>(IRequest<TResponse> request);
+        Task Send<TCommand>(TCommand command) where TCommand : ICommand;
+        Task<TResult> Send<TRequest, TResult>(TRequest request) where TRequest : IRequest<TResult>;
     }
 
 }

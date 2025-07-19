@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.47" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +23,7 @@
     <ProjectReference Include="..\BTM.Products.Composition\BTM.Products.Composition.csproj" />
     <ProjectReference Include="..\BTM.Products.Contracts\BTM.Products.Contracts.csproj" />
     <ProjectReference Include="..\BTM.Products.Infrastructure\BTM.Products.Infrastructure.csproj" />
+    <ProjectReference Include="..\BTM.Products.Service.ServiceDefaults\BTM.Products.Service.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

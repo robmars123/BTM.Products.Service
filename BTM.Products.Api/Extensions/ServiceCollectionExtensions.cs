@@ -64,6 +64,17 @@ namespace BTM.Products.Api.Extensions
                         RoleClaimType = "role",
                         ValidTypes = new[] { "at+jwt" }
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+                            var message = new { error = "Unauthorized", message = "Please click 'Authorize' in Swagger and provide a Bearer token." };
+                            return context.Response.WriteAsJsonAsync(message);
+                        }
+                    };
                 });
 
             services.AddAuthorization();

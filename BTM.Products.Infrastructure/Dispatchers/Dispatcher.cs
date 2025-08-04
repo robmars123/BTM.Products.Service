@@ -39,27 +39,21 @@ public class Dispatcher : IDispatcher
         await (Task)handleMethod.Invoke(handler, new object[] { command });
     }
 
-    public async Task<TResult> Send<TRequest, TResult>(TRequest request) where TRequest : IRequest<TResult>
+    public async Task<TResult> Send<TRequest, TResult>(TRequest request, CancellationToken cancellationToken = default)
+        where TRequest : IRequest<TResult>
     {
         var requestType = typeof(TRequest);
         var resultType = typeof(TResult);
         var handlerType = RequestHandlerTypes.GetOrAdd((requestType, resultType),
             _ => typeof(IRequestHandler<,>).MakeGenericType(requestType, resultType));
 
-        var handler = _serviceProvider.GetService(handlerType);
+        var handler = _serviceProvider.GetService(handlerType)
+            ?? throw new InvalidOperationException($"Handler not found for request type: {requestType.Name}");
 
-        if (handler is null)
-        {
-            throw new InvalidOperationException($"Handler not found for request type: {requestType.Name}");
-        }
+        var handleMethod = handlerType.GetMethod("Handle")
+            ?? throw new InvalidOperationException($"Handle method not found on handler for type: {requestType.Name}");
 
-        var handleMethod = handlerType.GetMethod("Handle");
-        if (handleMethod is null)
-        {
-            throw new InvalidOperationException($"Handle method not found on handler for type: {requestType.Name}");
-        }
-
-        var result = await (Task<TResult>)handleMethod.Invoke(handler, new object[] { request });
+        var result = await (Task<TResult>)handleMethod.Invoke(handler, new object[] { request, cancellationToken });
         return result;
     }
 }

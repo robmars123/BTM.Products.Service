@@ -1,12 +1,15 @@
 ﻿using BTM.Products.Application.Abstractions;
+using BTM.Products.Application.Results;
 using BTM.Products.Contracts.ProductDTOs;
 
 namespace BTM.Products.Application.Queries.GetProducts
 {
-    public class GetProductsQuery : IRequest<IEnumerable<ProductDto>>
+    public class GetProductsQuery : IRequest<Result<List<ProductResponse>>>
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
+        public GetProductsQuery(int id)
+        {
+            Id = id;
+        }
+        public int Id { get; }
     }
 }

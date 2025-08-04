@@ -9,7 +9,7 @@ namespace BTM.Products.Api.DispatcherHandlerDependencies
         /// </summary>
         /// <param name="services"></param>
         /// <param name="assembly"></param>
-        public static void AddRequestHandlers(this WebApplicationBuilder builder)
+        public static void AddQueryHandlers(this WebApplicationBuilder builder)
         {
             var handlerInterfaceType = typeof(IRequestHandler<,>);
 

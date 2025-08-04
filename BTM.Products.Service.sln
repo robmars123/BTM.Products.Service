@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.Products.Infrastructure
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.Products.Contracts", "BTM.Products.Contracts\BTM.Products.Contracts.csproj", "{22CA8587-6591-41A0-843E-4417D1D7A37D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.Products.ApiClient", "BTM.Products.Contracts\BTM.Products.ApiClient.csproj", "{22CA8587-6591-41A0-843E-4417D1D7A37D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.Products.Service.AppHost", "BTM.Products.Service.AppHost\BTM.Products.Service.AppHost.csproj", "{039B661D-0136-487D-A755-6783500765A2}"
 EndProject

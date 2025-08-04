@@ -6,7 +6,7 @@ builder.AddServiceDefaults();
 
 builder.Services.AddCustomServices(builder.Configuration);
 
-RegisterHandlers.AddRequestHandlers(builder);
+RegisterHandlers.AddQueryHandlers(builder);
 RegisterHandlers.AddCommandHandlers(builder);
 builder.Services.AddOpenApi();
 

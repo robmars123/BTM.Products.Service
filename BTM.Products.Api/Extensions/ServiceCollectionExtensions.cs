@@ -2,6 +2,8 @@
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BTM.Products.Infrastructure.DependencyInjection;
+using BTM.Products.Infrastructure.Connection;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTM.Products.Api.Extensions
 {
@@ -12,6 +14,17 @@ namespace BTM.Products.Api.Extensions
             services.AddControllers();
             services.AddInfrastructure();
             services.AddHttpContextAccessor();
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly("BTM.Account.Infrastructure");
+                        sqlOptions.EnableRetryOnFailure();  // Enables transient failure retry
+                    });
+            });
 
             // Ensure the required package is installed: Microsoft.Extensions.Caching.StackExchangeRedis
             services.AddStackExchangeRedisCache(options =>

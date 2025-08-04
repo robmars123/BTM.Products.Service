@@ -1,6 +1,7 @@
 ﻿using BTM.Products.Application.Abstractions.Mediator;
 using BTM.Products.Application.Commands;
 using BTM.Products.Application.Queries.GetProducts;
+using BTM.Products.Application.Results;
 using BTM.Products.Contracts.ProductCommands;
 using BTM.Products.Contracts.ProductDTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -22,14 +23,17 @@ namespace BTM.Products.Api.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int id)
         {
-            var results = await _dispatcher.Send<GetProductsQuery, IEnumerable<ProductDto>>(new GetProductsQuery());
+            var query = new GetProductsQuery(id);
+            var results = await _dispatcher.Send<GetProductsQuery, Result<List<ProductResponse>>>(query, cancellationToken: CancellationToken.None);
 
-            if (results == null || !results.Any())
-                return NotFound();
+            if (results == null || !results.IsSuccess)
+            {
+                return NotFound(results?.ErrorMessages);
+            }
 
-            return Ok(results.ToList());
+            return Ok(results.Data);
         }
 
         // POST  

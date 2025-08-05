@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BTM.Products.Infrastructure.DependencyInjection;
 using BTM.Products.Infrastructure.Connection;
 using Microsoft.EntityFrameworkCore;
+using BTM.Products.Api.Factories.Abstractions;
+using BTM.Products.Api.Factories;
 
 namespace BTM.Products.Api.Extensions
 {
@@ -11,6 +13,7 @@ namespace BTM.Products.Api.Extensions
     {
         public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IProductFactory, ProductFactory>();
             services.AddControllers();
             services.AddInfrastructure();
             services.AddHttpContextAccessor();

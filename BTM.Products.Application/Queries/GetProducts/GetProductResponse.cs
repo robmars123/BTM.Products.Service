@@ -5,12 +5,12 @@
         public int Id { get; }
         public string Name { get; }
 
-        public decimal Price { get; }
-        public GetProductResponse(int id, string name, decimal price)
+        public decimal UnitPrice { get; }
+        public GetProductResponse(int id, string name, decimal unitPrice)
         {
             Id = id;
             Name = name;
-            Price = price;
+            UnitPrice = unitPrice;
         }
     }
 }

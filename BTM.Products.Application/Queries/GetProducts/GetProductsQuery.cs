@@ -1,10 +1,10 @@
-﻿using BTM.Products.Application.Abstractions;
+﻿using BTM.Products.ApiClient.Out;
+using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Results;
-using BTM.Products.Contracts.ProductDTOs;
 
 namespace BTM.Products.Application.Queries.GetProducts
 {
-    public class GetProductsQuery : IRequest<Result<List<ProductResponse>>>
+    public class GetProductsQuery : IRequest<Result<List<GetProductResponse>>>
     {
         public GetProductsQuery(int id)
         {

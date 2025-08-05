@@ -1,9 +1,10 @@
-﻿using BTM.Products.Application.Abstractions.Mediator;
+﻿using BTM.Products.Api.Factories.Abstractions;
+using BTM.Products.ApiClient.Out;
+using BTM.Products.Application.Abstractions.Mediator;
 using BTM.Products.Application.Commands;
 using BTM.Products.Application.Queries.GetProducts;
 using BTM.Products.Application.Results;
 using BTM.Products.Contracts.ProductCommands;
-using BTM.Products.Contracts.ProductDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -16,24 +17,29 @@ namespace BTM.Products.Api.Controller
     public class ProductsController : ControllerBase
     {
         private readonly IDispatcher _dispatcher;
+        private readonly IProductFactory _productFactory;
 
-        public ProductsController(IDispatcher dispatcher)
+        public ProductsController(IDispatcher dispatcher, IProductFactory productFactory)
         {
             _dispatcher = dispatcher;
+            _productFactory = productFactory;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int id)
         {
-            var query = new GetProductsQuery(id);
-            var results = await _dispatcher.Send<GetProductsQuery, Result<List<ProductResponse>>>(query, cancellationToken: CancellationToken.None);
+            GetProductsQuery query = new GetProductsQuery(id);
+
+            Result<List<GetProductResponse>> results = await _dispatcher.Send<GetProductsQuery, Result<List<GetProductResponse>>>(query, cancellationToken: CancellationToken.None);
 
             if (results == null || !results.IsSuccess)
             {
-                return NotFound(results?.ErrorMessages);
+                return NotFound(results?.ErrorMessage);
             }
 
-            return Ok(results.Data);
+            IEnumerable<ProductResponse> response = _productFactory.Create(results.Data);
+
+            return Ok(response);
         }
 
         // POST  

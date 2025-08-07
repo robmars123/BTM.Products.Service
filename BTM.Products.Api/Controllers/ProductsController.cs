@@ -33,9 +33,7 @@ namespace BTM.Products.Api.Controller
             Result<List<GetProductResponse>> results = await _dispatcher.Send<GetProductsQuery, Result<List<GetProductResponse>>>(query, cancellationToken: CancellationToken.None);
 
             if (results == null || !results.IsSuccess)
-            {
                 return NotFound(results?.ErrorMessage);
-            }
 
             IEnumerable<ProductResponse> response = _productFactory.Create(results.Data);
 

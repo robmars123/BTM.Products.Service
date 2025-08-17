@@ -19,5 +19,15 @@ app.UseCustomMiddlewares();
 
 app.MapProductEndpoints();
 
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
+
 app.Run();
 
+namespace BTM.Products.Api
+{
+    public partial class Program { }
+}

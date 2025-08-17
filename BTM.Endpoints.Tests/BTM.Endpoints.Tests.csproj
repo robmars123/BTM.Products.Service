@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+	<ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="FluentAssertions" Version="8.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BTM.Products.Api\BTM.Products.Api.csproj" />
+    <ProjectReference Include="..\BTM.Products.Application\BTM.Products.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Update="xunit.runner.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<Target Name="CopyDepsJson" AfterTargets="Build">
+		<ItemGroup>
+			<DepsFile Include="..\BTM.Products.Api\bin\$(Configuration)\net9.0\BTM.Products.Api.deps.json" />
+		</ItemGroup>
+		<Copy SourceFiles="@(DepsFile)"
+			  DestinationFiles="$(OutDir)testhost.deps.json"
+			  SkipUnchangedFiles="true" />
+	</Target>
+
+
+</Project>

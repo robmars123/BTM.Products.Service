@@ -19,26 +19,15 @@ namespace BTM.Products.Application.Queries.GetAllProducts
         }
         public async Task<Result<List<GetAllProductsResponse>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            if (request is null)
-            {
-                return Result<List<GetAllProductsResponse>>.Failure("test");
-            }
-
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
 
             var sql = """
                         SELECT Id, Name, UnitPrice
                         FROM Product
-                        WHERE (@Id IS NULL OR Id = @Id)
                         """;
 
-            var parameters = new
-            {
-                Id = request.Id
-            };
-
-            List<Product> products = (await connection.QueryAsync<Product>(sql, parameters)).ToList();
+            List<Product> products = (await connection.QueryAsync<Product>(sql)).ToList();
 
             if (!products.Any())
                 return Result<List<GetAllProductsResponse>>.Failure("No products found matching the criteria.");

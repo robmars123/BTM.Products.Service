@@ -11,7 +11,7 @@ namespace BTM.Products.Api.Extensions
             endpoints.MapGet("/api/allproducts", GetAllProductsEndpoint.GetProducts).RequireAuthorization();
             endpoints.MapGet("/api/products", GetProductByIdEndpoints.GetProduct).RequireAuthorization();
             endpoints.MapPost("/api/products", CreateProductEndpoints.Create).RequireAuthorization();
-            endpoints.MapGet("/token", ([FromServices] CreateProductEndpoints endpoints) => endpoints.RequestToken());
+            endpoints.MapGet("/token", ([FromServices] GetAllProductsEndpoint endpoints) => endpoints.RequestToken());
 
             return endpoints;
         }

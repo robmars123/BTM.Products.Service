@@ -1,4 +1,6 @@
-﻿using BTM.Products.Api.Factories;
+﻿using BTM.Products.Api.Endpoints.Create;
+using BTM.Products.Api.Endpoints.GetById;
+using BTM.Products.Api.Factories;
 using BTM.Products.Api.Factories.Abstractions;
 using BTM.Products.Api.Services;
 using BTM.Products.Application.Abstractions;
@@ -17,6 +19,7 @@ namespace BTM.Products.Api.Extensions
         {
             AddFactories(services);
             AddServices(services);
+            AddEndpoints(services);
 
             services.AddInfrastructure();
             services.AddHttpContextAccessor();
@@ -25,6 +28,13 @@ namespace BTM.Products.Api.Extensions
             services.AddAuthorization();
 
             return services;
+        }
+
+        private static void AddEndpoints(IServiceCollection services)
+        {
+            services.AddScoped<CreateProductEndpoints>();
+            services.AddScoped<GetAllProductsEndpoint>();
+            services.AddScoped<GetProductByIdEndpoints>();
         }
 
         private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration)

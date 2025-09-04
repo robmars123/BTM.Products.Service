@@ -16,7 +16,7 @@ namespace BTM.Products.Api.Extensions
     {
         public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IProductFactory, ProductFactory>();
+            services.AddTransient<IGetProductByIdFactory, GetProductByIdFactory>();
             services.AddScoped<CreateProductEndpoints>();
             services.AddScoped<ITokenService, TokenService>();
 

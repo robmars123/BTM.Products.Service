@@ -2,22 +2,20 @@
 using BTM.Products.ApiClient.Out;
 using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Abstractions.Mediator;
-using BTM.Products.Application.Commands;
 using BTM.Products.Application.Queries.GetProducts;
 using BTM.Products.Application.Results;
-using BTM.Products.Contracts.ProductCommands;
 
 namespace BTM.Products.Api.Endpoints.GetById
 {
-    public class GetProductEndpoints
+    public class GetProductByIdEndpoints
     {
         private readonly ITokenService _tokenService;
 
-        public GetProductEndpoints(ITokenService tokenService)
+        public GetProductByIdEndpoints(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }
-        public static async Task<IResult> GetProduct(int id, IDispatcher dispatcher, IProductFactory factory)
+        public static async Task<IResult> GetProduct(int id, IDispatcher dispatcher, IGetProductByIdFactory factory)
         {
             var query = new GetProductByIdQuery(id);
 

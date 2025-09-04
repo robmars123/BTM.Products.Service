@@ -3,7 +3,7 @@ using BTM.Products.Application.Queries.GetProducts;
 
 namespace BTM.Products.Api.Factories.Abstractions
 {
-    public interface IProductFactory : IMapper<GetProductByIdResponse, ProductResponse>
+    public interface IGetProductByIdFactory : IMapper<GetProductByIdResponse, ProductResponse>
     {
         new ProductResponse Create(GetProductByIdResponse source);
         new IEnumerable<ProductResponse> Create(IEnumerable<GetProductByIdResponse> source);

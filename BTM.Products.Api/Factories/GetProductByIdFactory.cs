@@ -4,7 +4,7 @@ using BTM.Products.Application.Queries.GetProducts;
 
 namespace BTM.Products.Api.Factories
 {
-    public class ProductFactory : IProductFactory
+    public class GetProductByIdFactory : IGetProductByIdFactory
     {
         public ProductResponse Create(GetProductByIdResponse source)
         {

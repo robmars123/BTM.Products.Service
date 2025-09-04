@@ -1,14 +1,13 @@
-﻿using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using BTM.Products.Infrastructure.DependencyInjection;
-using BTM.Products.Infrastructure.Connection;
-using Microsoft.EntityFrameworkCore;
+﻿using BTM.Products.Api.Factories;
 using BTM.Products.Api.Factories.Abstractions;
-using BTM.Products.Api.Factories;
 using BTM.Products.Api.Services;
 using BTM.Products.Application.Abstractions;
-using BTM.Products.Api.Endpoints.Create;
+using BTM.Products.Infrastructure.Connection;
+using BTM.Products.Infrastructure.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.OpenApi.Models;
 
 namespace BTM.Products.Api.Extensions
 {
@@ -16,15 +15,20 @@ namespace BTM.Products.Api.Extensions
     {
         public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IGetProductByIdFactory, GetProductByIdFactory>();
-            services.AddTransient<IGetAllProductsFactory, GetAllProductsFactory>();
-            services.AddScoped<CreateProductEndpoints>();
-            services.AddScoped<ITokenService, TokenService>();
+            AddFactories(services);
+            AddServices(services);
 
-           // services.AddControllers();
             services.AddInfrastructure();
             services.AddHttpContextAccessor();
+            AddCrossCuttingConcerns(services, configuration);
 
+            services.AddAuthorization();
+
+            return services;
+        }
+
+        private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration)
+        {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(
@@ -99,10 +103,17 @@ namespace BTM.Products.Api.Extensions
                         }
                     };
                 });
+        }
 
-            services.AddAuthorization();
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<ITokenService, TokenService>();
+        }
 
-            return services;
+        private static void AddFactories(IServiceCollection services)
+        {
+            services.AddTransient<IGetProductByIdFactory, GetProductByIdFactory>();
+            services.AddTransient<IGetAllProductsFactory, GetAllProductsFactory>();
         }
     }
 }

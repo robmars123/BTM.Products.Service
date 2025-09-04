@@ -4,9 +4,9 @@ using BTM.Products.Application.Results;
 
 namespace BTM.Products.Application.Queries.GetProducts
 {
-    public class GetProductsQuery : IRequest<Result<List<GetProductResponse>>>
+    public class GetProductByIdQuery : IRequest<Result<List<GetProductByIdResponse>>>
     {
-        public GetProductsQuery(int id)
+        public GetProductByIdQuery(int id)
         {
             Id = id;
         }

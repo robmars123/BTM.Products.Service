@@ -1,4 +1,5 @@
 ﻿using BTM.Products.Api.Endpoints;
+using BTM.Products.Api.Endpoints.Create;
 using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Results;
 using FluentAssertions;
@@ -40,7 +41,7 @@ namespace BTM.Endpoints.Tests
             mockTokenService.Setup(x => x.RequestClientCredentialsTokenAsync())
                 .ReturnsAsync(new TokenResult(true, "mock-token", null));
 
-            var endpoints = new ProductEndpoints(mockTokenService.Object);
+            var endpoints = new CreateProductEndpoints(mockTokenService.Object);
             var result = await endpoints.RequestToken();
 
             var okResult = Assert.IsType<Ok<string>>(result);

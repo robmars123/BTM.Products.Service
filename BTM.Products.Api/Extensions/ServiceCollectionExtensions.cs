@@ -8,7 +8,7 @@ using BTM.Products.Api.Factories.Abstractions;
 using BTM.Products.Api.Factories;
 using BTM.Products.Api.Services;
 using BTM.Products.Application.Abstractions;
-using BTM.Products.Api.Endpoints;
+using BTM.Products.Api.Endpoints.Create;
 
 namespace BTM.Products.Api.Extensions
 {
@@ -17,7 +17,7 @@ namespace BTM.Products.Api.Extensions
         public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IProductFactory, ProductFactory>();
-            services.AddScoped<ProductEndpoints>();
+            services.AddScoped<CreateProductEndpoints>();
             services.AddScoped<ITokenService, TokenService>();
 
            // services.AddControllers();

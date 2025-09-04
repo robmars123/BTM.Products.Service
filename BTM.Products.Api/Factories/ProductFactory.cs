@@ -6,13 +6,13 @@ namespace BTM.Products.Api.Factories
 {
     public class ProductFactory : IProductFactory
     {
-        public ProductResponse Create(GetProductResponse source)
+        public ProductResponse Create(GetProductByIdResponse source)
         {
             if (source == null) return null;
             return new ProductResponse(source.Id, source.Name, source.UnitPrice);
         }
 
-        public IEnumerable<ProductResponse> Create(IEnumerable<GetProductResponse> source)
+        public IEnumerable<ProductResponse> Create(IEnumerable<GetProductByIdResponse> source)
         {
             if (source == null) return Enumerable.Empty<ProductResponse>();
 

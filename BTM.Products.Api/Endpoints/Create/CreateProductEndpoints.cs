@@ -1,4 +1,5 @@
 ﻿using BTM.Products.Api.Factories.Abstractions;
+using BTM.Products.ApiClient.Out;
 using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Abstractions.Mediator;
 using BTM.Products.Application.Commands;
@@ -6,29 +7,18 @@ using BTM.Products.Application.Queries.GetProducts;
 using BTM.Products.Application.Results;
 using BTM.Products.Contracts.ProductCommands;
 
-namespace BTM.Products.Api.Endpoints
+namespace BTM.Products.Api.Endpoints.Create
 {
-    public class ProductEndpoints
+    public class CreateProductEndpoints
     {
         private readonly ITokenService _tokenService;
 
-        public ProductEndpoints(ITokenService tokenService)
+        public CreateProductEndpoints(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }
-        public static async Task<IResult> GetProduct(int id, IDispatcher dispatcher, IProductFactory factory)
-        {
-            var query = new GetProductsQuery(id);
-            var result = await dispatcher.Send<GetProductsQuery, Result<List<GetProductResponse>>>(query, CancellationToken.None);
 
-            if (result == null || !result.IsSuccess)
-                return Results.NotFound(result?.ErrorMessage);
-
-            var response = factory.Create(result.Data);
-            return Results.Ok(response);
-        }
-
-        public static async Task<IResult> CreateProduct(CreateProductRequest product, IDispatcher dispatcher)
+        public static async Task<IResult> Create(CreateProductRequest product, IDispatcher dispatcher)
         {
             if (product == null)
                 return Results.BadRequest();

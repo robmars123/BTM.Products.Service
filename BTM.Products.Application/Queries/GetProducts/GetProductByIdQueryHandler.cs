@@ -7,19 +7,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace BTM.Products.Application.Queries.GetProducts
 {
-    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Result<List<GetProductResponse>>>
+    public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<List<GetProductByIdResponse>>>
     {
         private readonly string _connectionString;
 
-        public GetProductsQueryHandler(IConfiguration configuration)
+        public GetProductByIdQueryHandler(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<Result<List<GetProductResponse>>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<GetProductByIdResponse>>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             if (request is null)
             {
-                return Result<List<GetProductResponse>>.Failure("test");
+                return Result<List<GetProductByIdResponse>>.Failure("test");
             }
 
             using var connection = new SqlConnection(_connectionString);
@@ -39,11 +39,11 @@ namespace BTM.Products.Application.Queries.GetProducts
             List<Product> products = (await connection.QueryAsync<Product>(sql, parameters)).ToList();
 
             if (!products.Any())
-                return Result<List<GetProductResponse>>.Failure("No products found matching the criteria.");
+                return Result<List<GetProductByIdResponse>>.Failure("No products found matching the criteria.");
 
-            List<GetProductResponse> getProductResponse = products.Select(prod => new GetProductResponse(prod.Id, prod.Name, prod.UnitPrice)).ToList();
+            List<GetProductByIdResponse> getProductResponse = products.Select(prod => new GetProductByIdResponse(prod.Id, prod.Name, prod.UnitPrice)).ToList();
 
-            return Result<List<GetProductResponse>>.Success(getProductResponse);
+            return Result<List<GetProductByIdResponse>>.Success(getProductResponse);
         }
     }
 }

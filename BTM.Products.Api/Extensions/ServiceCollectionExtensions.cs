@@ -21,7 +21,7 @@ namespace BTM.Products.Api.Extensions
             AddServices(services);
             AddEndpoints(services);
 
-            services.AddInfrastructure();
+            services.AddInfrastructure(configuration);
             services.AddHttpContextAccessor();
             AddCrossCuttingConcerns(services, configuration);
 

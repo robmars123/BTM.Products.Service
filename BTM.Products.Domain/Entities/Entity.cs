@@ -1,7 +1,16 @@
 ﻿namespace BTM.Products.Domain.Entities
 {
-    public abstract class Entity<TId>
+    public abstract class Entity
     {
-        public TId Id { get; init; }
+        protected Entity(Guid id)
+        {
+            Id = id;
+        }
+
+        protected Entity()
+        {
+        }
+
+        public Guid Id { get; init; }
     }
 }

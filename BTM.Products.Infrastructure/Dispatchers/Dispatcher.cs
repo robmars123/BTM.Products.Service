@@ -1,6 +1,5 @@
 ﻿using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Abstractions.Mediator;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 
 namespace BTM.Products.Infrastructure.Dispatchers;
@@ -17,7 +16,7 @@ public class Dispatcher : IDispatcher
         _serviceProvider = serviceProvider;
     }
 
-    public async Task Send<TCommand>(TCommand command) where TCommand : ICommand
+    public async Task Send<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
     {
         var commandType = typeof(TCommand);
         var handlerType = CommandHandlerTypes.GetOrAdd(commandType,
@@ -36,7 +35,7 @@ public class Dispatcher : IDispatcher
             throw new InvalidOperationException($"Handle method not found on handler for type: {commandType.Name}");
         }
 
-        await (Task)handleMethod.Invoke(handler, new object[] { command });
+        await (Task)handleMethod.Invoke(handler, new object[] { command, cancellationToken });
     }
 
     public async Task<TResult> Send<TRequest, TResult>(TRequest request, CancellationToken cancellationToken = default)

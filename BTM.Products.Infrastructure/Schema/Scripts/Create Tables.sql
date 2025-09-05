@@ -9,7 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[Product](
-	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](120) NULL,
 	[UnitPrice] [decimal](18, 0) NULL
 ) ON [PRIMARY]

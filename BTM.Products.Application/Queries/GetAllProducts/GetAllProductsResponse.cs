@@ -2,11 +2,11 @@
 {
     public class GetAllProductsResponse
     {
-        public int Id { get; }
+        public Guid Id { get; }
         public string Name { get; }
 
         public decimal UnitPrice { get; }
-        public GetAllProductsResponse(int id, string name, decimal unitPrice)
+        public GetAllProductsResponse(Guid id, string name, decimal unitPrice)
         {
             Id = id;
             Name = name;

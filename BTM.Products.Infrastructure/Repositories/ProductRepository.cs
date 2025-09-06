@@ -12,10 +12,7 @@ namespace BTM.Products.Infrastructure.Repositories
 
         public async Task AddProductAsync(Product product, CancellationToken cancellationToken = default)
         {
-            Add(product, cancellationToken);
-
-            //temporary solution until implementing unit of work
-            await DbContext.SaveChangesAsync(cancellationToken);
+            await AddAsync(product, cancellationToken);
         }
     }
 }

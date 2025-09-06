@@ -15,7 +15,7 @@ namespace BTM.Products.Api.Endpoints.GetById
         {
             _tokenService = tokenService;
         }
-        public static async Task<IResult> GetProduct(int id, IDispatcher dispatcher, IGetProductByIdFactory factory)
+        public static async Task<IResult> GetProduct(Guid id, IDispatcher dispatcher, IGetProductByIdFactory factory)
         {
             var query = new GetProductByIdQuery(id);
 

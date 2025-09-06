@@ -6,10 +6,10 @@ namespace BTM.Products.Application.Queries.GetProducts
 {
     public class GetProductByIdQuery : IRequest<Result<List<GetProductByIdResponse>>>
     {
-        public GetProductByIdQuery(int id)
+        public GetProductByIdQuery(Guid id)
         {
             Id = id;
         }
-        public int Id { get; }
+        public Guid Id { get; }
     }
 }

@@ -12,9 +12,9 @@ namespace BTM.Products.Infrastructure.Repositories
             DbContext = dbContext;
         }
 
-        public virtual void Add(T entity, CancellationToken cancellationToken)
+        public virtual async Task AddAsync(T entity, CancellationToken cancellationToken)
         {
-            DbContext.AddAsync(entity, cancellationToken);
+            await DbContext.Set<T>().AddAsync(entity, cancellationToken);
         }
 
         public virtual void Remove(T entity, CancellationToken cancellationToken)

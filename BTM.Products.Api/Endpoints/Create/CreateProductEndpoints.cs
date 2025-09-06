@@ -1,10 +1,6 @@
-﻿using BTM.Products.Api.Factories.Abstractions;
-using BTM.Products.ApiClient.Out;
-using BTM.Products.Application.Abstractions;
+﻿using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Abstractions.Mediator;
 using BTM.Products.Application.Commands;
-using BTM.Products.Application.Queries.GetProducts;
-using BTM.Products.Application.Results;
 using BTM.Products.Contracts.ProductCommands;
 
 namespace BTM.Products.Api.Endpoints.Create

@@ -1,5 +1,4 @@
-﻿using BTM.Products.ApiClient.Out;
-using BTM.Products.Application.Abstractions;
+﻿using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Results;
 
 namespace BTM.Products.Application.Queries.GetProducts

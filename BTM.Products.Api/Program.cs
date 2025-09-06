@@ -1,4 +1,3 @@
-using BTM.Products.Api.DispatcherHandlerDependencies;
 using BTM.Products.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +8,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCustomServices(builder.Configuration);
 
-RegisterHandlers.AddQueryHandlers(builder);
-RegisterHandlers.AddCommandHandlers(builder);
+//Register all command, event and request handlers automatically
+builder.Services.RegisterHandlers();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

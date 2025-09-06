@@ -7,7 +7,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BTM.Products.Contracts\BTM.Products.ApiClient.csproj" />
     <ProjectReference Include="..\BTM.Products.Domain\BTM.Products.Domain.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 ﻿using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Abstractions.Mediator;
-using BTM.Products.Application.Commands;
+using BTM.Products.Application.Commands.AddProduct;
 using BTM.Products.Contracts.ProductCommands;
 
 namespace BTM.Products.Api.Endpoints.Create

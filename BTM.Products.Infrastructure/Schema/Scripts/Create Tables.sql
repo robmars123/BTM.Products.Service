@@ -11,7 +11,8 @@ GO
 CREATE TABLE [dbo].[Product](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](120) NULL,
-	[UnitPrice] [decimal](18, 0) NULL
+	[UnitPrice] [decimal](18, 4) NULL,
+	[IsDeleted] [bit] NOT NULL
 ) ON [PRIMARY]
 GO
 

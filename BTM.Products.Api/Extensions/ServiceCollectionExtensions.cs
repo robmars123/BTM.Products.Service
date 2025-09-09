@@ -34,7 +34,7 @@ namespace BTM.Products.Api.Extensions
         {
             services.AddScoped<CreateProductEndpoints>();
             services.AddScoped<GetAllProductsEndpoint>();
-            services.AddScoped<GetProductByIdEndpoints>();
+            services.AddScoped<RemoveProductByIdEndpoints>();
         }
 
         private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration)

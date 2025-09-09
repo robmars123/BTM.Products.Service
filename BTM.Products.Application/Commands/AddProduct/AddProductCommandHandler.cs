@@ -5,7 +5,7 @@ using BTM.Products.Domain.Abstractions;
 using BTM.Products.Domain.Entities;
 using BTM.Products.Domain.Events;
 
-namespace BTM.Products.Application.Commands
+namespace BTM.Products.Application.Commands.AddProduct
 {
     public class AddProductCommandHandler : ICommandHandler<AddProductCommand>
     {
@@ -22,7 +22,7 @@ namespace BTM.Products.Application.Commands
         public async Task Handle(AddProductCommand command, CancellationToken cancellationToken)
         {
             //Create domain entity via factory to enforce business rules
-            var product = Product.Create(command.Name, command.Price);
+            Product product = Product.Create(command.Name, command.Price);
 
             await _productRepository.AddProductAsync(product, cancellationToken);
 

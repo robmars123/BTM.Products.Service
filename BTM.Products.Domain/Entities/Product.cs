@@ -2,8 +2,9 @@
 {
     public class Product : Entity 
     {
-        public string Name { get; set; }
-        public decimal UnitPrice { get; set; }
+        public string Name { get; private set; }
+        public decimal UnitPrice { get; private set; }
+        public bool IsDeleted { get; private set; }
 
         public Product(Guid id, string name, decimal unitPrice) : base(id)
         {
@@ -29,6 +30,11 @@
                 throw new ArgumentException("Price must be greater than or equal to zero.", nameof(newPrice));
 
             UnitPrice = newPrice;
+        }
+
+        public void Remove()
+        {
+            IsDeleted = true;
         }
     }
 }

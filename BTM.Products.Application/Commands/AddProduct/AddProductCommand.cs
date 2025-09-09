@@ -1,12 +1,6 @@
 ﻿using BTM.Products.Application.Abstractions;
-using BTM.Products.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BTM.Products.Application.Commands
+namespace BTM.Products.Application.Commands.AddProduct
 {
     public class AddProductCommand : ICommand
     {

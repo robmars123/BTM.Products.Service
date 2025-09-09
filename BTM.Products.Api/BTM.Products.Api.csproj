@@ -34,7 +34,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Endpoints\Remove\" />
 	  <Folder Include="Endpoints\Update\" />
 	</ItemGroup>
 

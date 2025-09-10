@@ -1,7 +1,15 @@
-﻿using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using BTM.Products.Api.Endpoints.Create;
+using BTM.Products.Api.Endpoints.GetById;
+using BTM.Products.Api.Factories;
+using BTM.Products.Api.Factories.Abstractions;
+using BTM.Products.Api.Services;
+using BTM.Products.Application.Abstractions;
+using BTM.Products.Infrastructure.Connection;
 using BTM.Products.Infrastructure.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.OpenApi.Models;
 
 namespace BTM.Products.Api.Extensions
 {
@@ -9,15 +17,44 @@ namespace BTM.Products.Api.Extensions
     {
         public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddControllers();
-            services.AddInfrastructure();
+            AddFactories(services);
+            AddServices(services);
+            AddEndpoints(services);
+
+            services.AddInfrastructure(configuration);
             services.AddHttpContextAccessor();
+            AddCrossCuttingConcerns(services, configuration);
+
+            services.AddAuthorization();
+
+            return services;
+        }
+
+        private static void AddEndpoints(IServiceCollection services)
+        {
+            services.AddScoped<UpdateProductEndpoints>();
+            services.AddScoped<GetAllProductsEndpoint>();
+            services.AddScoped<RemoveProductByIdEndpoints>();
+        }
+
+        private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly("BTM.Products.Infrastructure");
+                        sqlOptions.EnableRetryOnFailure();  // Enables transient failure retry
+                    });
+            });
 
             // Ensure the required package is installed: Microsoft.Extensions.Caching.StackExchangeRedis
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["RedisSettings:ConnectionString"];
-                options.InstanceName = "BTMAccount.Cache";
+                options.InstanceName = "BTMProducts.Cache";
             });
 
             services.AddOpenApi();
@@ -76,10 +113,17 @@ namespace BTM.Products.Api.Extensions
                         }
                     };
                 });
+        }
 
-            services.AddAuthorization();
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<ITokenService, TokenService>();
+        }
 
-            return services;
+        private static void AddFactories(IServiceCollection services)
+        {
+            services.AddTransient<IGetProductByIdFactory, GetProductByIdFactory>();
+            services.AddTransient<IGetAllProductsFactory, GetAllProductsFactory>();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace BTM.Products.Api.Extensions
                     configuration.GetConnectionString("DefaultConnection"),
                     sqlOptions =>
                     {
-                        sqlOptions.MigrationsAssembly("BTM.Account.Infrastructure");
+                        sqlOptions.MigrationsAssembly("BTM.Products.Infrastructure");
                         sqlOptions.EnableRetryOnFailure();  // Enables transient failure retry
                     });
             });
@@ -54,7 +54,7 @@ namespace BTM.Products.Api.Extensions
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["RedisSettings:ConnectionString"];
-                options.InstanceName = "BTMAccount.Cache";
+                options.InstanceName = "BTMProducts.Cache";
             });
 
             services.AddOpenApi();

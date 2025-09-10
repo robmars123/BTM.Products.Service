@@ -26,7 +26,7 @@ namespace BTM.Products.Infrastructure.DependencyInjection
                     configuration.GetConnectionString("DefaultConnection"),
                     sqlOptions =>
                     {
-                        sqlOptions.MigrationsAssembly("BTM.Account.Infrastructure");
+                        sqlOptions.MigrationsAssembly("BTM.Products.Infrastructure");
                         sqlOptions.EnableRetryOnFailure();  // Enables transient failure retry
                     });
             });

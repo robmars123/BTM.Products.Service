@@ -4,7 +4,7 @@
     {
         public string Name { get; private set; }
         public decimal UnitPrice { get; private set; }
-        public bool IsDeleted { get; private set; }
+        public bool IsDeleted { get; private set; } = false;
 
         public Product(Guid id, string name, decimal unitPrice) : base(id)
         {

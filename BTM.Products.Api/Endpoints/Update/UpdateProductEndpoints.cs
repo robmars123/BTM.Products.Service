@@ -5,21 +5,21 @@ using BTM.Products.Application.Commands.AddProduct;
 
 namespace BTM.Products.Api.Endpoints.Create
 {
-    public class CreateProductEndpoints
+    public class UpdateProductEndpoints
     {
         private readonly ITokenService _tokenService;
 
-        public CreateProductEndpoints(ITokenService tokenService)
+        public UpdateProductEndpoints(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }
 
-        public static async Task<IResult> Create(CreateProductRequest product, IDispatcher dispatcher)
+        public static async Task<IResult> Update(UpdateProductRequest product, IDispatcher dispatcher)
         {
             if (product == null)
                 return Results.BadRequest();
 
-            var command = new AddProductCommand(product.Name, product.Price);
+            var command = new UpdateProductCommand(product.id, product.name, product.unitPrice, product.isDeleted);
             await dispatcher.Send(command);
 
             return Results.Created($"/api/products", product);

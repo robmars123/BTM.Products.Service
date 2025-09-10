@@ -11,6 +11,15 @@ namespace BTM.Products.Infrastructure.Repositories
         {
         }
 
+        public async Task<Product> GetByIdAsync(Guid guid, CancellationToken cancellationToken = default)
+        {
+            var product = await DbContext.Products.FirstOrDefaultAsync(p => p.Id == guid, cancellationToken);
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+
+            return product;
+        }
+
         public async Task AddProductAsync(Product product, CancellationToken cancellationToken = default)
         {
             await AddAsync(product, cancellationToken);

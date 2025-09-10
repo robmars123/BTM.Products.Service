@@ -24,12 +24,14 @@
             return new Product(id, name, price);
         }
 
-        public void UpdatePrice(decimal newPrice)
+        public void UpdateProduct(string name, decimal newPrice, bool isDeleted)
         {
             if (newPrice < 0)
                 throw new ArgumentException("Price must be greater than or equal to zero.", nameof(newPrice));
 
+            Name = name;
             UnitPrice = newPrice;
+            IsDeleted = isDeleted;
         }
 
         public void Remove()

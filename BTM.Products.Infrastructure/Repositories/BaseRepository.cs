@@ -17,5 +17,10 @@ namespace BTM.Products.Infrastructure.Repositories
         {
             await DbContext.Set<T>().AddAsync(entity, cancellationToken);
         }
+
+        public virtual void Update(T entity)
+        {
+            DbContext.Set<T>().Update(entity);
+        }
     }
 }

@@ -5,5 +5,5 @@
     /// </summary>
     /// <param name="Name"></param>
     /// <param name="Price"></param>
-    public record CreateProductRequest(string Name, decimal Price);
+    public record UpdateProductRequest(Guid id, string name, decimal unitPrice, bool isDeleted);
 }

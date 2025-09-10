@@ -32,7 +32,7 @@ namespace BTM.Products.Api.Extensions
 
         private static void AddEndpoints(IServiceCollection services)
         {
-            services.AddScoped<CreateProductEndpoints>();
+            services.AddScoped<UpdateProductEndpoints>();
             services.AddScoped<GetAllProductsEndpoint>();
             services.AddScoped<RemoveProductByIdEndpoints>();
         }

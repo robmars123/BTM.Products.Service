@@ -25,6 +25,7 @@ namespace BTM.Products.Application.Queries.GetAllProducts
             var sql = """
                         SELECT Id, Name, UnitPrice
                         FROM Product
+                        WHERE IsDeleted = 0
                         """;
 
             List<Product> products = (await connection.QueryAsync<Product>(sql)).ToList();

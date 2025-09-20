@@ -15,7 +15,7 @@ namespace BTM.Products.Application.Queries.GetProducts
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<Result<List<GetProductByIdResponse>>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<GetProductByIdResponse>>> Handle(GetProductByIdQuery request)
         {
             if (request is null)
             {

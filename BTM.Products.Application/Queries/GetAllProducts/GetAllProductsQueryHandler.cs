@@ -17,7 +17,7 @@ namespace BTM.Products.Application.Queries.GetAllProducts
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<Result<List<GetAllProductsResponse>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<GetAllProductsResponse>>> Handle(GetAllProductsQuery request)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();

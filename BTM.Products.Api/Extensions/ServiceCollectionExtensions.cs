@@ -4,8 +4,11 @@ using BTM.Products.Api.Factories;
 using BTM.Products.Api.Factories.Abstractions;
 using BTM.Products.Api.Services;
 using BTM.Products.Application.Abstractions;
+using BTM.Products.Application.Abstractions.Repositories;
+using BTM.Products.Domain.Abstractions;
 using BTM.Products.Infrastructure.Connection;
 using BTM.Products.Infrastructure.DependencyInjection;
+using BTM.Products.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -21,7 +24,7 @@ namespace BTM.Products.Api.Extensions
             AddServices(services);
             AddEndpoints(services);
 
-            services.AddInfrastructure();
+            services.AddInfrastructure(configuration);
             services.AddHttpContextAccessor();
             AddCrossCuttingConcerns(services, configuration);
 
@@ -35,6 +38,11 @@ namespace BTM.Products.Api.Extensions
             services.AddScoped<UpdateProductEndpoints>();
             services.AddScoped<GetAllProductsEndpoint>();
             services.AddScoped<RemoveProductByIdEndpoints>();
+
+            services.AddScoped<CreateProductEndpoints>();
+            services.AddScoped<GetProductByIdEndpoints>();
+            
+            services.AddScoped<IProductRepository, ProductRepository>();
         }
 
         private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration)

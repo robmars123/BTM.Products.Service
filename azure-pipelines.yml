@@ -1,48 +1,68 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core
+# Automatically detects solution file in nested folders
 
 trigger:
   branches:
     include:
-      - master  # Replace with the branch you want to monitor
+      - master
 
 pool: Default
+
+variables:
+  configuration: 'Release'
+  dotnetVersion: '7.0.x'  # LTS version
 
 stages:
   - stage: Restore
     jobs:
       - job: RestoreJob
         steps:
+          # Install supported .NET SDK
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '9.x'  # Use .NET 9.x or any other version you're targeting
-              installationPath: $(Agent.ToolsDirectory)/dotnet
+              version: '$(dotnetVersion)'
 
-          - checkout: self  # Ensure repository is checked out early
+          # Checkout repo
+          - checkout: self
             clean: true
 
-          - script: dotnet restore
-            displayName: 'Restore dependencies'
+          # Find solution file dynamically (Windows agent)
+          - powershell: |
+              $sln = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Recurse -Filter *.sln | Select-Object -First 1
+              if ($null -eq $sln) { Write-Error "No .sln file found!" }
+              Write-Host "Solution found: $($sln.FullName)"
+              Write-Host "##vso[task.setvariable variable=SolutionPath]$($sln.FullName)"
+            displayName: 'Find solution file'
+
+          # Restore solution
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore solution'
+            inputs:
+              command: 'restore'
+              projects: '$(SolutionPath)'
 
   - stage: Build
-    dependsOn: Restore  # This makes Build depend on the Restore stage
+    dependsOn: Restore
     jobs:
       - job: BuildJob
         steps:
-          - script: dotnet build --configuration Release
-            displayName: 'Build project'
+          - task: DotNetCoreCLI@2
+            displayName: 'Build solution'
+            inputs:
+              command: 'build'
+              projects: '$(SolutionPath)'
+              arguments: '--configuration $(configuration)'
 
   - stage: Test
     dependsOn: Build
     jobs:
       - job: TestJob
         steps:
-    # Step 1: Install .NET SDK
-        - task: UseDotNet@2
-          displayName: 'Install .NET'
-          inputs:
-            packageType: 'sdk'
-            version: '9.0.x'
+          - task: DotNetCoreCLI@2
+            displayName: 'Run tests'
+            inputs:
+              command: 'test'
+              projects: '$(SolutionPath)'
+              arguments: '--configuration $(configuration) --no-build'

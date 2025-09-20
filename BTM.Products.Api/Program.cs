@@ -3,6 +3,17 @@ using BTM.Products.Api.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDevClient", policy =>
+    {
+        policy.AllowAnyOrigin() // Angular dev server
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -24,6 +35,9 @@ if (!app.Environment.IsEnvironment("Testing"))
     app.UseAuthentication();
     app.UseAuthorization();
 }
+
+// Use CORS
+app.UseCors("AllowAngularDevClient");
 
 app.Run();
 

@@ -29,7 +29,7 @@ namespace BTM.Products.Application.Queries.GetAllProducts
                         """;
 
             List<Product> products = (await connection.QueryAsync<Product>(sql)).ToList();
-
+             
             if (!products.Any())
                 return Result<List<GetAllProductsResponse>>.Failure("No products found matching the criteria.");
 

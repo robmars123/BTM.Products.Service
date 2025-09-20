@@ -1,7 +1,6 @@
 # ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# Build and test ASP.NET Core projects targeting .NET Core
+# Automatically detects solution file in nested folders
 
 trigger:
   branches:
@@ -12,7 +11,7 @@ pool: Default
 
 variables:
   configuration: 'Release'
-  dotnetVersion: '9.0.x'  # LTS version supported on hosted agents
+  dotnetVersion: '7.0.x'  # LTS version
 
 stages:
   - stage: Restore
@@ -29,24 +28,31 @@ stages:
           - checkout: self
             clean: true
 
-          # Restore the nested solution
+          # Find solution file dynamically (Windows agent)
+          - powershell: |
+              $sln = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Recurse -Filter *.sln | Select-Object -First 1
+              if ($null -eq $sln) { Write-Error "No .sln file found!" }
+              Write-Host "Solution found: $($sln.FullName)"
+              Write-Host "##vso[task.setvariable variable=SolutionPath]$($sln.FullName)"
+            displayName: 'Find solution file'
+
+          # Restore solution
           - task: DotNetCoreCLI@2
             displayName: 'Restore solution'
             inputs:
               command: 'restore'
-              projects: 'src\BTM.Products.Service\src\api\*.sln'
+              projects: '$(SolutionPath)'
 
   - stage: Build
     dependsOn: Restore
     jobs:
       - job: BuildJob
         steps:
-          # Build the nested solution
           - task: DotNetCoreCLI@2
             displayName: 'Build solution'
             inputs:
               command: 'build'
-              projects: 'src\BTM.Products.Service\src\api\*.sln'
+              projects: '$(SolutionPath)'
               arguments: '--configuration $(configuration)'
 
   - stage: Test
@@ -54,10 +60,9 @@ stages:
     jobs:
       - job: TestJob
         steps:
-          # Run tests for the nested solution
           - task: DotNetCoreCLI@2
             displayName: 'Run tests'
             inputs:
               command: 'test'
-              projects: 'src\BTM.Products.Service\src\api\*.sln'
+              projects: '$(SolutionPath)'
               arguments: '--configuration $(configuration) --no-build'

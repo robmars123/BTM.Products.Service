@@ -34,7 +34,7 @@ stages:
             displayName: 'Restore solution'
             inputs:
               command: 'restore'
-              projects: 'src/BTM.Products.Service/src/api/*.sln'
+              projects: 'src\BTM.Products.Service\src\api\*.sln'
 
   - stage: Build
     dependsOn: Restore
@@ -46,7 +46,7 @@ stages:
             displayName: 'Build solution'
             inputs:
               command: 'build'
-              projects: 'src/BTM.Products.Service/src/api/*.sln'
+              projects: 'src\BTM.Products.Service\src\api\*.sln'
               arguments: '--configuration $(configuration)'
 
   - stage: Test
@@ -59,5 +59,5 @@ stages:
             displayName: 'Run tests'
             inputs:
               command: 'test'
-              projects: 'src/BTM.Products.Service/src/api/*.sln'
+              projects: 'src\BTM.Products.Service\src\api\*.sln'
               arguments: '--configuration $(configuration) --no-build'

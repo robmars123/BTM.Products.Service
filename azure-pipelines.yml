@@ -12,38 +12,38 @@ pool: Default
 
 variables:
   configuration: 'Release'
+  dotnetVersion: '9.0.x'  # LTS version supported on hosted agents
 
 stages:
   - stage: Restore
     jobs:
       - job: RestoreJob
         steps:
-          # Install .NET SDK
+          # Install supported .NET SDK
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '9.x'
+              version: '$(dotnetVersion)'
 
           # Checkout repo
           - checkout: self
             clean: true
 
-          # Restore all solutions
+          # Restore the nested solution
           - task: DotNetCoreCLI@2
-            displayName: 'Restore all solutions'
+            displayName: 'Restore solution'
             inputs:
               command: 'restore'
               projects: 'src/BTM.Products.Service/src/api/*.sln'
-
 
   - stage: Build
     dependsOn: Restore
     jobs:
       - job: BuildJob
         steps:
-          # Build all solutions
+          # Build the nested solution
           - task: DotNetCoreCLI@2
-            displayName: 'Build all solutions'
+            displayName: 'Build solution'
             inputs:
               command: 'build'
               projects: 'src/BTM.Products.Service/src/api/*.sln'
@@ -54,11 +54,10 @@ stages:
     jobs:
       - job: TestJob
         steps:
-          # Test all solutions
+          # Run tests for the nested solution
           - task: DotNetCoreCLI@2
-            displayName: 'Run tests for all solutions'
+            displayName: 'Run tests'
             inputs:
               command: 'test'
               projects: 'src/BTM.Products.Service/src/api/*.sln'
               arguments: '--configuration $(configuration) --no-build'
-

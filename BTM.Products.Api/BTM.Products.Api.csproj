@@ -11,14 +11,14 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.8" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
 		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
 		<PackageReference Include="Scrutor" Version="6.1.0" />
 		<PackageReference Include="StackExchange.Redis" Version="2.8.47" />
@@ -28,8 +28,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\BTM.Products.ApiClient\BTM.Products.ApiClient.csproj" />
 		<ProjectReference Include="..\BTM.Products.Application\BTM.Products.Application.csproj" />
-		<ProjectReference Include="..\BTM.Products.Composition\BTM.Products.Composition.csproj" />
-		<ProjectReference Include="..\BTM.Products.Contracts\BTM.Products.Contracts.csproj" />
 		<ProjectReference Include="..\BTM.Products.Infrastructure\BTM.Products.Infrastructure.csproj" />
 		<ProjectReference Include="..\BTM.Products.Service.ServiceDefaults\BTM.Products.Service.ServiceDefaults.csproj" />
 	</ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using BTM.Products.ApiClient.In;
 using BTM.Products.Application.Abstractions;
 using BTM.Products.Application.Abstractions.Mediator;
-using BTM.Products.Application.Commands.AddProduct;
+using BTM.Products.Application.Commands;
 
 namespace BTM.Products.Api.Endpoints.Create
 {

@@ -1,7 +1,8 @@
 ﻿using BTM.Products.Application.Abstractions;
+using BTM.Products.Application.Abstractions.Events;
 using BTM.Products.Application.Abstractions.Mediator;
+using BTM.Products.Domain.Abstractions.Events;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Concurrent;
 
 namespace BTM.Products.Infrastructure.Dispatchers;
 
@@ -9,57 +10,35 @@ public class Dispatcher : IDispatcher
 {
     private readonly IServiceProvider _serviceProvider;
 
-    private static readonly ConcurrentDictionary<Type, Type> CommandHandlerTypes = new();
-    private static readonly ConcurrentDictionary<(Type, Type), Type> RequestHandlerTypes = new();
-
     public Dispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
-    public async Task Send<TCommand>(TCommand command) where TCommand : ICommand
+    // Command: single handler
+    public async Task Send<TCommand>(TCommand command, CancellationToken ct = default)
+        where TCommand : ICommand
     {
-        var commandType = typeof(TCommand);
-        var handlerType = CommandHandlerTypes.GetOrAdd(commandType,
-            t => typeof(ICommandHandler<>).MakeGenericType(t));
-
-        var handler = _serviceProvider.GetService(handlerType);
-
-        if (handler is null)
-        {
-            throw new InvalidOperationException($"Handler not found for command type: {commandType.Name}");
-        }
-
-        var handleMethod = handlerType.GetMethod("Handle");
-        if (handleMethod is null)
-        {
-            throw new InvalidOperationException($"Handle method not found on handler for type: {commandType.Name}");
-        }
-
-        await (Task)handleMethod.Invoke(handler, new object[] { command });
+        var handler = _serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
+        await handler.Handle(command, ct);
     }
 
-    public async Task<TResult> Send<TRequest, TResult>(TRequest request) where TRequest : IRequest<TResult>
+    // Query/Request: single handler returning a result
+    public async Task<TResult> Send<TRequest, TResult>(TRequest request, CancellationToken ct = default)
+        where TRequest : IRequest<TResult>
     {
-        var requestType = typeof(TRequest);
-        var resultType = typeof(TResult);
-        var handlerType = RequestHandlerTypes.GetOrAdd((requestType, resultType),
-            _ => typeof(IRequestHandler<,>).MakeGenericType(requestType, resultType));
+        var handler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest, TResult>>();
+        return await handler.Handle(request);
+    }
 
-        var handler = _serviceProvider.GetService(handlerType);
-
-        if (handler is null)
+    // Event: multiple subscribers
+    public async Task Publish<TEvent>(TEvent @event) where TEvent : IDomainEvent
+    {
+        var handlers = _serviceProvider.GetServices<IEventHandler<TEvent>>();
+        foreach (var handler in handlers)
         {
-            throw new InvalidOperationException($"Handler not found for request type: {requestType.Name}");
+            await handler.Handle(@event);
         }
-
-        var handleMethod = handlerType.GetMethod("Handle");
-        if (handleMethod is null)
-        {
-            throw new InvalidOperationException($"Handle method not found on handler for type: {requestType.Name}");
-        }
-
-        var result = await (Task<TResult>)handleMethod.Invoke(handler, new object[] { request });
-        return result;
     }
 }
+

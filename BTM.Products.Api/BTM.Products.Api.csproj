@@ -6,6 +6,12 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<PreserveCompilationContext>true</PreserveCompilationContext>
+
+		<UserSecretsId>b5b74c82-888a-40aa-8bfd-859416987e07</UserSecretsId>
+
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,6 +26,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
 		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 		<PackageReference Include="Scrutor" Version="6.1.0" />
 		<PackageReference Include="StackExchange.Redis" Version="2.8.47" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
@@ -30,6 +37,10 @@
 		<ProjectReference Include="..\BTM.Products.Application\BTM.Products.Application.csproj" />
 		<ProjectReference Include="..\BTM.Products.Infrastructure\BTM.Products.Infrastructure.csproj" />
 		<ProjectReference Include="..\BTM.Products.Service.ServiceDefaults\BTM.Products.Service.ServiceDefaults.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="certs\" />
 	</ItemGroup>
 
 </Project>

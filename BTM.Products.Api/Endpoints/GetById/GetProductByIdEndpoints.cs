@@ -19,12 +19,12 @@ namespace BTM.Products.Api.Endpoints.GetById
         {
             var query = new GetProductByIdQuery(id);
 
-            var result = await dispatcher.Send<GetProductByIdQuery, Result<List<GetProductByIdResponse>>>(query, CancellationToken.None);
+            var result = await dispatcher.Send<GetProductByIdQuery, Result<GetProductByIdResponse>>(query, CancellationToken.None);
 
             if (result == null || !result.IsSuccess)
                 return Results.NotFound(result?.ErrorMessage);
 
-            IEnumerable<ProductResponse> response = factory.Create(result.Data);
+            ProductResponse response = factory.Create(result.Data);
             return Results.Ok(response);
         }
 

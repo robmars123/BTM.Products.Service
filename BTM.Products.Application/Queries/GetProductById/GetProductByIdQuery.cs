@@ -3,7 +3,7 @@ using BTM.Products.Application.Results;
 
 namespace BTM.Products.Application.Queries.GetProducts
 {
-    public class GetProductByIdQuery : IRequest<Result<List<GetProductByIdResponse>>>
+    public class GetProductByIdQuery : IRequest<Result<GetProductByIdResponse>>
     {
         public GetProductByIdQuery(Guid id)
         {

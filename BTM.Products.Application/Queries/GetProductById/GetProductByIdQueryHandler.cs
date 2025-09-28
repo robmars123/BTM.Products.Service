@@ -1,49 +1,26 @@
 ﻿using BTM.Products.Application.Abstractions;
+using BTM.Products.Application.Abstractions.Repositories;
 using BTM.Products.Application.Results;
-using BTM.Products.Domain.Entities;
-using Dapper;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
 namespace BTM.Products.Application.Queries.GetProducts
 {
-    public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<List<GetProductByIdResponse>>>
+    public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<GetProductByIdResponse>>
     {
         private readonly string _connectionString;
+        private readonly IProductRepository _productRepository;
 
-        public GetProductByIdQueryHandler(IConfiguration configuration)
+        public GetProductByIdQueryHandler(IConfiguration configuration, IProductRepository productRepository)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _productRepository = productRepository;
         }
-        public async Task<Result<List<GetProductByIdResponse>>> Handle(GetProductByIdQuery request)
+        public async Task<Result<GetProductByIdResponse>> Handle(GetProductByIdQuery request)
         {
-            if (request is null)
-            {
-                return Result<List<GetProductByIdResponse>>.Failure("test");
-            }
-
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-
-            var sql = """
-                        SELECT Id, Name, UnitPrice
-                        FROM Product
-                        WHERE (@Id IS NULL OR Id = @Id)
-                        """;
-
-            var parameters = new
-            {
-                Id = request.Id
-            };
-
-            List<Product> products = (await connection.QueryAsync<Product>(sql, parameters)).ToList();
-
-            if (!products.Any())
-                return Result<List<GetProductByIdResponse>>.Failure("No products found matching the criteria.");
-
-            List<GetProductByIdResponse> getProductResponse = products.Select(prod => new GetProductByIdResponse(prod.Id, prod.Name, prod.UnitPrice)).ToList();
-
-            return Result<List<GetProductByIdResponse>>.Success(getProductResponse);
+            //todo add Cache
+            var response = await _productRepository.GetByIdAsync(request.Id);
+            GetProductByIdResponse getProductByIdResponse = new GetProductByIdResponse(response.Id, response.Name, response.UnitPrice);
+            return Result<GetProductByIdResponse>.Success(getProductByIdResponse);
         }
     }
 }

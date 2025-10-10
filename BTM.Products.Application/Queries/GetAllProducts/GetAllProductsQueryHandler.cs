@@ -1,6 +1,4 @@
 ﻿using BTM.Products.Application.Abstractions;
-using BTM.Products.Application.Queries.GetAllProducts;
-using BTM.Products.Application.Queries.GetProducts;
 using BTM.Products.Application.Results;
 using BTM.Products.Domain.Entities;
 using Dapper;
@@ -9,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace BTM.Products.Application.Queries.GetAllProducts
 {
-    public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, Result<List<GetAllProductsResponse>>>
+    public class GetAllProductsQueryHandler : IRequestHandler<GetPagedProductsQuery, Result<List<GetAllProductsResponse>>>
     {
         private readonly string _connectionString;
 
@@ -17,7 +15,7 @@ namespace BTM.Products.Application.Queries.GetAllProducts
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<Result<List<GetAllProductsResponse>>> Handle(GetAllProductsQuery request)
+        public async Task<Result<List<GetAllProductsResponse>>> Handle(GetPagedProductsQuery request)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -26,10 +24,20 @@ namespace BTM.Products.Application.Queries.GetAllProducts
                         SELECT Id, Name, UnitPrice
                         FROM Product
                         WHERE IsDeleted = 0
+                        ORDER BY Name
+                        OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
                         """;
 
-            List<Product> products = (await connection.QueryAsync<Product>(sql)).ToList();
-             
+
+            List<Product> products = (await connection.QueryAsync<Product>(
+                        sql,
+                        new
+                        {
+                            Offset = (request.page - 1) * request.pageSize,
+                            PageSize = request.pageSize
+                        }
+                    )).ToList();
+
             if (!products.Any())
                 return Result<List<GetAllProductsResponse>>.Failure("No products found matching the criteria.");
 

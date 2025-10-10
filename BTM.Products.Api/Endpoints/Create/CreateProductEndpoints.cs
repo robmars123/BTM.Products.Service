@@ -22,7 +22,7 @@ namespace BTM.Products.Api.Endpoints.Create
             var command = new AddProductCommand(product.Name, product.Price);
             await dispatcher.Send(command);
 
-            return Results.Created($"/api/products", product);
+            return Results.Created($"/api/product", product);
         }
 
         public async Task<IResult> RequestToken()

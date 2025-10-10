@@ -5,7 +5,7 @@ GO
 -- Generates random product data using SQL loops and randomization
 
 DECLARE @Counter INT = 1;
-DECLARE @MaxRecords INT = 50;
+DECLARE @MaxRecords INT = 50000;
 DECLARE @RandomName NVARCHAR(120);
 DECLARE @RandomPrice DECIMAL(18,4);
 DECLARE @RandomCategory NVARCHAR(50);

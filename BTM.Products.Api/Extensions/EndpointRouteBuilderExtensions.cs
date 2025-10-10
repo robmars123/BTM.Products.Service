@@ -8,10 +8,10 @@ namespace BTM.Products.Api.Extensions
     {
         public static IEndpointRouteBuilder MapProductEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/api/allproducts", GetAllProductsEndpoint.GetProducts);
+            endpoints.MapGet("/api/getPagedProducts", GetAllProductsEndpoint.GetPagedProducts);
             endpoints.MapGet("/api/getproduct", GetProductByIdEndpoints.GetProduct);
             endpoints.MapDelete("/api/removeproducts", RemoveProductByIdEndpoints.RemoveProduct).RequireAuthorization();
-            endpoints.MapPost("/api/addproducts", CreateProductEndpoints.Create).RequireAuthorization();
+            endpoints.MapPost("/api/addproduct", CreateProductEndpoints.Create).RequireAuthorization();
             endpoints.MapPut("/api/updateproducts", UpdateProductEndpoints.Update).RequireAuthorization();
             endpoints.MapGet("/token", ([FromServices] GetAllProductsEndpoint endpoints) => endpoints.RequestToken());
 

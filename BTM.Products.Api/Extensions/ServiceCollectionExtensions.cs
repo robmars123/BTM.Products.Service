@@ -18,7 +18,7 @@ namespace BTM.Products.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             AddFactories(services);
             AddServices(services);
@@ -26,7 +26,7 @@ namespace BTM.Products.Api.Extensions
 
             services.AddInfrastructure(configuration);
             services.AddHttpContextAccessor();
-            AddCrossCuttingConcerns(services, configuration);
+            AddCrossCuttingConcerns(services, configuration, env);
 
             services.AddAuthorization();
 
@@ -45,7 +45,7 @@ namespace BTM.Products.Api.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
         }
 
-        private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration)
+        private static void AddCrossCuttingConcerns(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -96,10 +96,13 @@ namespace BTM.Products.Api.Extensions
 
             JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+                .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = "https://host.docker.internal:5001";
                     options.Audience = "ProductsAPI";
+
+                    options.RequireHttpsMetadata = true;
+
                     options.TokenValidationParameters = new()
                     {
                         ValidateIssuer = true,

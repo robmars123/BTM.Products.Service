@@ -30,12 +30,19 @@ namespace BTM.Products.Api.Endpoints.GetById
             pageSize = pageSize <= 0 ? 10 : pageSize;
 
             GetPagedProductsQuery query = new GetPagedProductsQuery(page, pageSize);
-            var result = await dispatcher.Send<GetPagedProductsQuery, Result<List<GetAllProductsResponse>>>(query,cancellationToken);
+            var result = await dispatcher.Send<GetPagedProductsQuery, Result<PagedResult<GetAllProductsResponse>>>(query, cancellationToken);
 
             if (!result.IsSuccess || result.Data == null)
                 return Results.NotFound(result.ErrorMessage);
 
-            IEnumerable<ProductResponse> response = factory.Create(result.Data);
+            List<ProductResponse> items = factory.Create(result.Data.Items).ToList();
+
+            PagedResponse<ProductResponse> response = new PagedResponse<ProductResponse>(
+                    items,
+                    result.Data.TotalCount,
+                    page,
+                    pageSize
+                );
             return Results.Ok(response);
         }
 

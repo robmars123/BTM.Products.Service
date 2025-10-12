@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace BTM.Products.Application.Queries.GetAllProducts
 {
-    public class GetAllProductsQueryHandler : IRequestHandler<GetPagedProductsQuery, Result<List<GetAllProductsResponse>>>
+    public class GetAllProductsQueryHandler : IRequestHandler<GetPagedProductsQuery, Result<PagedResult<GetAllProductsResponse>>>
     {
         private readonly string _connectionString;
 
@@ -15,35 +15,38 @@ namespace BTM.Products.Application.Queries.GetAllProducts
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<Result<List<GetAllProductsResponse>>> Handle(GetPagedProductsQuery request)
+        public async Task<Result<PagedResult<GetAllProductsResponse>>> Handle(GetPagedProductsQuery request)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
 
             var sql = """
-                        SELECT Id, Name, UnitPrice
-                        FROM Product
-                        WHERE IsDeleted = 0
-                        ORDER BY Name
-                        OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
-                        """;
+                SELECT COUNT(*) 
+                FROM Product 
+                WHERE IsDeleted = 0;
 
+                SELECT Id, Name, UnitPrice, CreatedDate
+                FROM Product
+                WHERE IsDeleted = 0
+                ORDER BY CreatedDate
+                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
+                """;
 
-            List<Product> products = (await connection.QueryAsync<Product>(
-                        sql,
-                        new
-                        {
-                            Offset = (request.page - 1) * request.pageSize,
-                            PageSize = request.pageSize
-                        }
-                    )).ToList();
+            using var multi = await connection.QueryMultipleAsync(sql, new
+            {
+                Offset = (request.page - 1) * request.pageSize,
+                PageSize = request.pageSize
+            });
 
-            if (!products.Any())
-                return Result<List<GetAllProductsResponse>>.Failure("No products found matching the criteria.");
+            int totalCount = await multi.ReadSingleAsync<int>();
+            var products = (await multi.ReadAsync<Product>()).ToList();
 
-            List<GetAllProductsResponse> getProductResponse = products.Select(prod => new GetAllProductsResponse(prod.Id, prod.Name, prod.UnitPrice)).ToList();
+            var responses = products
+                .Select(p => new GetAllProductsResponse(p.Id, p.Name, p.UnitPrice))
+                .ToList();
 
-            return Result<List<GetAllProductsResponse>>.Success(getProductResponse);
+            PagedResult<GetAllProductsResponse> result = new PagedResult<GetAllProductsResponse>(responses, totalCount);
+            return Result<PagedResult<GetAllProductsResponse>>.Success(result);
         }
     }
 }

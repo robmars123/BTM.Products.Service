@@ -22,7 +22,7 @@ namespace BTM.Products.Application.Commands.AddProduct
         public async Task Handle(AddProductCommand command, CancellationToken cancellationToken)
         {
             //Create domain entity via factory to enforce business rules
-            Product product = Product.Create(command.Name, command.Price);
+            Product product = Product.Create(command.Name, command.Price, DateTime.UtcNow);
 
             await _productRepository.AddProductAsync(product, cancellationToken);
 

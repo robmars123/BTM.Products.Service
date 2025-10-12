@@ -28,7 +28,7 @@ namespace BTM.Products.Application.Queries.GetAllProducts
                 SELECT Id, Name, UnitPrice, CreatedDate
                 FROM Product
                 WHERE IsDeleted = 0
-                ORDER BY CreatedDate
+                ORDER BY CreatedDate desc
                 OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
                 """;
 

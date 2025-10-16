@@ -13,15 +13,17 @@ services:
      - "5002:80"     # HTTP
      - "5003:443"    # HTTPS
 
-    environment:
+    environment: 
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: "https://+:443;http://+:80"
       ConnectionStrings__DefaultConnection: "Server=host.docker.internal,1433;Database=BTM.Product.Database;User Id=sa;Password=Password@123;Encrypt=True;TrustServerCertificate=True"
     volumes:
       - ./data/keys:/app/keys
     networks:
-      - docker-network
+      - btm-network
+
+      
 
 networks:
-  docker-network:
-    external: true
+  btm-network:
+    driver: bridge

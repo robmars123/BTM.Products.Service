@@ -95,23 +95,27 @@ namespace BTM.Products.Api.Extensions
             });
 
             JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://host.docker.internal:5001";
+                     options.Authority = "https://host.docker.internal:5001"; //docker internal for local dev
+                   // options.Authority = "https://localhost:5001";//local dev
+                   // options.Authority = "https://identityserver:443"; // production
                     options.Audience = "ProductsAPI";
 
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = false;
 
                     options.TokenValidationParameters = new()
                     {
                         ValidateIssuer = true,
+                        ValidIssuer = "https://localhost:5001",  // match token's 'iss'
                         ValidateAudience = true,
+                        ValidAudience = "ProductsAPI",
                         ValidateLifetime = true,
                         NameClaimType = "name",
-                        RoleClaimType = "role",
-                        ValidTypes = new[] { "at+jwt" }
+                        RoleClaimType = "role"
                     };
+
                     options.Events = new JwtBearerEvents
                     {
                         OnChallenge = context =>
@@ -119,7 +123,7 @@ namespace BTM.Products.Api.Extensions
                             context.HandleResponse();
                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
-                            var message = new { error = "Unauthorized", message = "Please click 'Authorize' in Swagger and provide a Bearer token." };
+                            var message = new { error = "Unauthorized", message = "Unauthorized" };
                             return context.Response.WriteAsJsonAsync(message);
                         }
                     };

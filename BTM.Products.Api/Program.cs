@@ -8,10 +8,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDevClient", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") //Specific origin
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); //Only needed if you're using cookies or credentials
+        policy.WithOrigins(
+            "http://localhost:4200",
+            "http://localhost:8080",
+            "https://localhost:5003"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials(); //Only needed if you're using cookies or credentials
     });
 });
 
@@ -27,12 +31,12 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// Use CORS
+app.UseCors("AllowAngularDevClient");
+
 app.UseCustomMiddlewares();
 
 app.MapProductEndpoints();
-
-// Use CORS
-app.UseCors("AllowAngularDevClient");
 
 if (!app.Environment.IsEnvironment("Testing"))
 {

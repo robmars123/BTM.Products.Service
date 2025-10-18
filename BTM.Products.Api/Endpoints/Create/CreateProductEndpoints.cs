@@ -19,7 +19,7 @@ namespace BTM.Products.Api.Endpoints.Create
             if (product == null)
                 return Results.BadRequest();
 
-            var command = new AddProductCommand(product.Name, product.Price);
+            var command = new AddProductCommand(product.Name, product.UnitPrice);
             await dispatcher.Send(command);
 
             return Results.Created($"/api/product", product);

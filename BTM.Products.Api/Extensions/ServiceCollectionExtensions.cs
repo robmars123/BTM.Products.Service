@@ -98,8 +98,8 @@ namespace BTM.Products.Api.Extensions
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                     options.Authority = "https://host.docker.internal:5001"; //docker internal for local dev
-                   // options.Authority = "https://localhost:5001";//local dev
+                    // options.Authority = "https://host.docker.internal:5001"; //docker internal for local dev
+                    options.Authority = "https://localhost:5001";//local dev
                    // options.Authority = "https://identityserver:443"; // production
                     options.Audience = "ProductsAPI";
 
